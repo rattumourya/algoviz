@@ -96,4 +96,8 @@
     .prose :where(code):not(:where([class~="not-prose"] *))::after {
         content: "";
     }
+    .scroll-fade {
+        -webkit-mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
+        mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
+    }
 }

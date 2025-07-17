@@ -42,7 +42,7 @@ export default function SolutionPanel({ problemData }: SolutionPanelProps) {
           <TabsContent value="solution" className="mt-4 space-y-4">
               <div>
                 <h3 className="font-headline text-xl font-semibold mb-2">Explanation</h3>
-                <ScrollArea className="h-60">
+                <ScrollArea className="h-60 scroll-fade">
                   <div className="prose prose-sm max-w-none text-foreground/90 pr-4">
                     <ReactMarkdown
                       components={{
@@ -70,7 +70,7 @@ export default function SolutionPanel({ problemData }: SolutionPanelProps) {
               </div>
               <div>
                 <h3 className="font-headline text-xl font-semibold mb-2">Code</h3>
-                <ScrollArea className="h-60">
+                <ScrollArea className="h-60 scroll-fade">
                   <div className="bg-muted rounded-md p-4">
                     <pre className="font-code text-sm"><code>{solutionCode}</code></pre>
                   </div>
