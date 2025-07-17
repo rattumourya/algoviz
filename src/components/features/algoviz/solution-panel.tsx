@@ -90,18 +90,17 @@ export default function SolutionPanel({ problemData }: SolutionPanelProps) {
                 <div className="prose prose-sm max-w-none text-foreground/90">
                   <ReactMarkdown
                     components={{
-                      p: (props) => <div {...props} className="mb-4 last:mb-0" />,
+                      p: ({ node, ...props }) => <p className="mb-2 last:mb-0" {...props} />,
                       pre: ({ node, ...props }) => <pre className="font-code text-sm bg-muted rounded-md p-3 my-3 overflow-x-auto" {...props} />,
                       code({node, inline, className, children, ...props}) {
-                        const match = /language-(\w+)/.exec(className || '')
                         return !inline ? (
-                           <pre className="font-code text-sm bg-muted rounded-md p-3 my-3 overflow-x-auto" {...props} >
+                          <pre className="font-code text-sm bg-muted rounded-md p-3 my-3 overflow-x-auto" {...props}>
                             <code className={className}>
                               {children}
                             </code>
                           </pre>
                         ) : (
-                          <code className="font-code bg-muted px-1 py-0.5 rounded-sm" {...props}>
+                          <code className="font-code bg-muted px-1.5 py-0.5 rounded-[0.3rem] text-sm" {...props}>
                             {children}
                           </code>
                         )
