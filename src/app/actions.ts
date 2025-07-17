@@ -42,7 +42,7 @@ export async function getProblemAndSolution(problemNumber: number) {
       },
     });
 
-    const solutionData = llmResponse.output();
+    const solutionData = llmResponse.output;
 
     if (!solutionData) {
       throw new Error('Could not generate a solution for the problem.');
