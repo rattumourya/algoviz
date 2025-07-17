@@ -78,7 +78,7 @@ export default function SolutionPanel({ problemData }: SolutionPanelProps) {
               {hints.map((hint, index) => (
                 <AccordionItem value={`item-${index + 1}`} key={index}>
                   <AccordionTrigger className="hover:no-underline">Hint #{index + 1}</AccordionTrigger>
-                  <AccordionContent>{hint}</AccordionContent>
+                  <AccordionContent className="font-code">{hint}</AccordionContent>
                 </AccordionItem>
               ))}
             </Accordion>

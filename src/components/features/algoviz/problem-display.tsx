@@ -6,7 +6,7 @@ import { cn, toKebabCase } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
-export default function ProblemDisplay(props: Omit<ProblemData, 'similarProblems'>) {
+export default function ProblemDisplay(props: Omit<ProblemData, 'similarProblems' | 'solutionCodes' | 'solutionExplanation' | 'hints' | 'defaultInput'>) {
   const { problemNumber, problemName, dsaTopic, difficultyLevel, problemStatement, constraints, examples } = props;
 
   const difficultyColors: {[key: string]: string} = {
