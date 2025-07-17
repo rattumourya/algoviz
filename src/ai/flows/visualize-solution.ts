@@ -50,25 +50,36 @@ The state must include:
 2. 'pointers': A dictionary of all active pointers or indices and their current positions.
 3. 'action': A clear, concise description of what just happened.
 
+**A COMPLETE AND DETAILED EXAMPLE**
+
 Example Python Code:
+\`\`\`python
 def twoSum(nums, target):
-    for i in range(len(nums)):
-        for j in range(i + 1, len(nums)):
-            if nums[j] == target - nums[i]:
-                return [i, j]
+    numMap = {}
+    for i, n in enumerate(nums):
+        diff = target - n
+        if diff in numMap:
+            return [numMap[diff], i]
+        numMap[n] = i
+\`\`\`
 
 Example Input:
+\`\`\`
 nums = [2, 7, 11, 15], target = 9
+\`\`\`
 
-Example Output JSON Structure:
+Example Output JSON Structure (You must follow this structure exactly):
+\`\`\`json
 {
   "animation": [
-    { "state": [2, 7, 11, 15], "pointers": { "i": 0 }, "action": "Outer loop starts. i is at index 0." },
-    { "state": [2, 7, 11, 15], "pointers": { "i": 0, "j": 1 }, "action": "Inner loop starts. j is at index 1." },
-    { "state": [2, 7, 11, 15], "pointers": { "i": 0, "j": 1 }, "action": "Comparing nums[j] (7) with target - nums[i] (9 - 2 = 7). They match." }
+    { "state": [2, 7, 11, 15], "pointers": { "i": 0 }, "action": "Loop starts. i=0, n=2. Calculate diff = 9 - 2 = 7." },
+    { "state": [2, 7, 11, 15], "pointers": { "i": 0 }, "action": "diff (7) is not in numMap. Add n (2) to numMap. numMap is now {2: 0}." },
+    { "state": [2, 7, 11, 15], "pointers": { "i": 1 }, "action": "Loop continues. i=1, n=7. Calculate diff = 9 - 7 = 2." },
+    { "state": [2, 7, 11, 15], "pointers": { "i": 1 }, "action": "diff (2) is in numMap. Match found!" }
   ],
   "output": "[0, 1]"
 }
+\`\`\`
 
 Now, perform the trace for the following:
 Solution Code:
