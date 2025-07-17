@@ -1,14 +1,17 @@
 
 'use client';
 
+import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Card, CardContent } from '@/components/ui/card';
 import type { ProblemData } from '@/lib/types';
-import { Lightbulb, Code, PlaySquare } from 'lucide-react';
+import { Lightbulb, Code, PlaySquare, Copy, Check } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import VisualizationDisplay from './visualization-display';
 import ReactMarkdown from 'react-markdown';
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
 
 
 interface SolutionPanelProps {
@@ -17,6 +20,18 @@ interface SolutionPanelProps {
 
 export default function SolutionPanel({ problemData }: SolutionPanelProps) {
   const { hints, solutionCode, solutionExplanation, dsaTopic, defaultInput } = problemData;
+  const [isCopied, setIsCopied] = useState(false);
+  const { toast } = useToast();
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(solutionCode).then(() => {
+        setIsCopied(true);
+        toast({ title: 'Success', description: 'Code copied to clipboard!' });
+        setTimeout(() => setIsCopied(false), 2000);
+    }, (err) => {
+        toast({ variant: 'destructive', title: 'Error', description: 'Failed to copy code.' });
+    });
+  };
 
   return (
     <Card className="shadow-lg w-full">
@@ -42,39 +57,48 @@ export default function SolutionPanel({ problemData }: SolutionPanelProps) {
           <TabsContent value="solution" className="mt-4 space-y-4">
               <div>
                 <h3 className="font-headline text-xl font-semibold mb-2">Explanation</h3>
-                <ScrollArea className="h-60 scroll-fade">
-                  <div className="prose prose-sm max-w-none text-foreground/90 pr-4">
-                    <ReactMarkdown
-                      components={{
-                        p: (props) => <div {...props} className="mb-4 last:mb-0" />,
-                        code({node, inline, className, children, ...props}) {
-                          const match = /language-(\w+)/.exec(className || '')
-                          return !inline ? (
-                            <pre className="font-code text-sm bg-muted rounded-md p-3 my-3 overflow-x-auto">
-                              <code {...props}>
-                                {children}
-                              </code>
-                            </pre>
-                          ) : (
-                            <code className="font-code bg-muted px-1 py-0.5 rounded-sm" {...props}>
+                <div className="prose prose-sm max-w-none text-foreground/90 pr-4">
+                  <ReactMarkdown
+                    components={{
+                      p: (props) => <div {...props} className="mb-4 last:mb-0" />,
+                      code({node, inline, className, children, ...props}) {
+                        const match = /language-(\w+)/.exec(className || '')
+                        return !inline ? (
+                          <pre className="font-code text-sm bg-muted rounded-md p-3 my-3 overflow-x-auto">
+                            <code {...props}>
                               {children}
                             </code>
-                          )
-                        }
-                      }}
-                    >
-                      {solutionExplanation}
-                    </ReactMarkdown>
-                  </div>
-                </ScrollArea>
+                          </pre>
+                        ) : (
+                          <code className="font-code bg-muted px-1 py-0.5 rounded-sm" {...props}>
+                            {children}
+                          </code>
+                        )
+                      }
+                    }}
+                  >
+                    {solutionExplanation}
+                  </ReactMarkdown>
+                </div>
               </div>
               <div>
                 <h3 className="font-headline text-xl font-semibold mb-2">Code</h3>
-                <ScrollArea className="h-60 scroll-fade">
-                  <div className="bg-muted rounded-md p-4">
-                    <pre className="font-code text-sm"><code>{solutionCode}</code></pre>
-                  </div>
-                </ScrollArea>
+                <div className="relative">
+                    <Button
+                        size="icon"
+                        variant="ghost"
+                        className="absolute top-2 right-2 h-7 w-7"
+                        onClick={handleCopy}
+                    >
+                        {isCopied ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
+                        <span className="sr-only">Copy code</span>
+                    </Button>
+                    <ScrollArea className="h-60 scroll-fade">
+                        <div className="bg-muted rounded-md p-4">
+                        <pre className="font-code text-sm"><code>{solutionCode}</code></pre>
+                        </div>
+                    </ScrollArea>
+                </div>
               </div>
           </TabsContent>
 
