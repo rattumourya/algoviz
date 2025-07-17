@@ -87,29 +87,31 @@ export default function SolutionPanel({ problemData }: SolutionPanelProps) {
           <TabsContent value="solution" className="mt-4 space-y-4">
               <div>
                 <h3 className="font-headline text-xl font-semibold mb-2">Explanation</h3>
-                <div className="prose prose-sm max-w-none text-foreground/90">
-                  <ReactMarkdown
-                    components={{
-                      p: ({node, ...props}) => <div className="mb-2 last:mb-0" {...props} />,
-                      pre: ({ node, ...props }) => <pre className="font-code text-sm bg-muted rounded-md p-3 my-3 overflow-x-auto" {...props} />,
-                      code({node, inline, className, children, ...props}) {
-                        return !inline ? (
-                          <pre className="font-code text-sm bg-muted rounded-md p-3 my-3 overflow-x-auto" {...props}>
-                            <code className={className}>
-                              {children}
-                            </code>
-                          </pre>
-                        ) : (
-                          <code className="font-code bg-muted px-1.5 py-0.5 rounded-[0.3rem] text-sm" {...props}>
-                            {children}
-                          </code>
-                        )
-                      }
-                    }}
-                  >
-                    {solutionExplanation}
-                  </ReactMarkdown>
-                </div>
+                 <ScrollArea className="h-60 scroll-fade">
+                    <div className="prose prose-sm max-w-none text-foreground/90 pr-4">
+                        <ReactMarkdown
+                            components={{
+                                p: ({node, ...props}) => <p className="mb-2 last:mb-0" {...props} />,
+                                pre: ({ node, ...props }) => <pre className="font-code text-sm bg-muted rounded-md p-3 my-3 overflow-x-auto" {...props} />,
+                                code({node, inline, className, children, ...props}) {
+                                    return !inline ? (
+                                    <pre className="font-code text-sm bg-muted rounded-md p-3 my-3 overflow-x-auto" {...props}>
+                                        <code className={className}>
+                                        {children}
+                                        </code>
+                                    </pre>
+                                    ) : (
+                                    <code className="font-code bg-muted px-1.5 py-0.5 rounded-[0.3rem] text-sm" {...props}>
+                                        {children}
+                                    </code>
+                                    )
+                                }
+                            }}
+                        >
+                            {solutionExplanation}
+                        </ReactMarkdown>
+                    </div>
+                </ScrollArea>
               </div>
               <div>
                 <h3 className="font-headline text-xl font-semibold mb-2">Code</h3>
