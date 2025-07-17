@@ -90,6 +90,7 @@ export default function SolutionPanel({ problemData }: SolutionPanelProps) {
                 <div className="prose prose-sm max-w-none text-foreground/90">
                   <ReactMarkdown
                     components={{
+                      p: ({node, ...props}) => <div className="mb-2 last:mb-0" {...props} />,
                       pre: ({ node, ...props }) => <pre className="font-code text-sm bg-muted rounded-md p-3 my-3 overflow-x-auto" {...props} />,
                       code({node, inline, className, children, ...props}) {
                         return !inline ? (
