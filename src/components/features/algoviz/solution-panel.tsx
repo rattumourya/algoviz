@@ -57,7 +57,7 @@ export default function SolutionPanel({ problemData }: SolutionPanelProps) {
           <TabsContent value="solution" className="mt-4 space-y-4">
               <div>
                 <h3 className="font-headline text-xl font-semibold mb-2">Explanation</h3>
-                <div className="prose prose-sm max-w-none text-foreground/90 pr-4">
+                <div className="prose prose-sm max-w-none text-foreground/90">
                   <ReactMarkdown
                     components={{
                       p: (props) => <div {...props} className="mb-4 last:mb-0" />,
