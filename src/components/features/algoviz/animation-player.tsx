@@ -24,6 +24,12 @@ export default function AnimationPlayer({ data }: AnimationPlayerProps) {
   
   const step = data.animation[currentStep];
 
+  const isNumericState = useMemo(() => {
+    if (!step || !step.state || step.state.length === 0) return false;
+    return step.state.every(item => typeof item === 'number');
+  }, [step]);
+
+
   useEffect(() => {
     setCurrentStep(0);
     setIsPlaying(false);
@@ -66,6 +72,53 @@ export default function AnimationPlayer({ data }: AnimationPlayerProps) {
     return map;
   }, [data.animation]);
 
+  const renderState = () => {
+    if (isNumericState) {
+        return (
+            <div className="flex space-x-2 items-end h-40">
+                {step.state.map((value, index) => (
+                    <div key={index} className="flex flex-col items-center relative transition-all duration-300">
+                        {renderPointers(index)}
+                        <div className={cn("w-10 flex items-center justify-center text-white font-bold rounded-t-md transition-colors duration-300", 
+                            Object.values(step.pointers).includes(index) ? 'bg-primary/80' : 'bg-primary/50'
+                        )} style={{ height: `${Math.max(10, (value as number) * 10 + 10)}px` }}>
+                            {String(value)}
+                        </div>
+                    </div>
+                ))}
+            </div>
+        );
+    }
+
+    return (
+        <div className="flex space-x-2 items-start h-40">
+            {step.state.map((value, index) => (
+                <div key={index} className="flex flex-col items-center relative transition-all duration-300">
+                    {renderPointers(index)}
+                    <div className={cn("w-12 h-12 flex items-center justify-center text-white font-bold rounded-md transition-colors duration-300", 
+                        Object.values(step.pointers).includes(index) ? 'bg-primary/80' : 'bg-primary/50'
+                    )}>
+                        {String(value)}
+                    </div>
+                </div>
+            ))}
+        </div>
+    );
+  };
+  
+  const renderPointers = (index: number) => (
+      <div className="flex flex-col items-center absolute -top-12">
+          {Object.entries(step.pointers).map(([name, pos]) => 
+              pos === index && (
+                  <div key={name} className="flex flex-col items-center transition-all duration-300" style={{ transform: `translateX(0)` }}>
+                      <span className="text-xs font-bold" style={{ color: pointerColorMap[name] }}>{name}</span>
+                      <div className="w-0 h-0 border-l-4 border-r-4 border-t-4 border-l-transparent border-r-transparent" style={{ borderTopColor: pointerColorMap[name] }} />
+                  </div>
+              )
+          )}
+      </div>
+  );
+
   return (
     <Card className="w-full shadow-lg">
       <CardHeader>
@@ -73,31 +126,11 @@ export default function AnimationPlayer({ data }: AnimationPlayerProps) {
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="bg-muted p-4 rounded-lg min-h-[200px] flex items-center justify-center overflow-x-auto">
-           <div className="flex space-x-2 items-end h-40">
-                {step.state.map((value, index) => (
-                    <div key={index} className="flex flex-col items-center relative transition-all duration-300">
-                        <div className="flex flex-col items-center absolute -top-12">
-                            {Object.entries(step.pointers).map(([name, pos]) => 
-                                pos === index && (
-                                    <div key={name} className="flex flex-col items-center transition-all duration-300" style={{ transform: `translateX(0)` }}>
-                                        <span className="text-xs font-bold" style={{ color: pointerColorMap[name] }}>{name}</span>
-                                        <div className="w-0 h-0 border-l-4 border-r-4 border-t-4 border-l-transparent border-r-transparent" style={{ borderTopColor: pointerColorMap[name] }} />
-                                    </div>
-                                )
-                            )}
-                        </div>
-                        <div className={cn("w-10 flex items-center justify-center text-white font-bold rounded-t-md transition-colors duration-300", 
-                            Object.values(step.pointers).includes(index) ? 'bg-primary/80' : 'bg-primary/50'
-                        )} style={{ height: `${Math.max(10, value * 10 + 10)}px` }}>
-                            {value}
-                        </div>
-                    </div>
-                ))}
-            </div>
+            {step ? renderState() : <p>No animation data.</p>}
         </div>
 
-        <div className="text-center p-2 bg-background rounded-md border">
-            <p className="font-mono text-sm">{step.action}</p>
+        <div className="text-center p-2 bg-background rounded-md border min-h-[4rem] flex items-center justify-center">
+            <p className="font-mono text-sm">{step?.action || 'Animation finished.'}</p>
         </div>
 
         {currentStep === data.animation.length - 1 && (

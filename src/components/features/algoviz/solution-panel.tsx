@@ -94,9 +94,9 @@ export default function SolutionPanel({ problemData }: SolutionPanelProps) {
                       pre: ({ node, ...props }) => <pre className="font-code text-sm bg-muted rounded-md p-3 my-3 overflow-x-auto" {...props} />,
                       code({node, inline, className, children, ...props}) {
                         const match = /language-(\w+)/.exec(className || '')
-                        return !inline && match ? (
-                          <pre className="font-code text-sm bg-muted rounded-md p-3 my-3 overflow-x-auto">
-                            <code {...props} className={className}>
+                        return !inline ? (
+                           <pre className="font-code text-sm bg-muted rounded-md p-3 my-3 overflow-x-auto" {...props} >
+                            <code className={className}>
                               {children}
                             </code>
                           </pre>
@@ -143,7 +143,7 @@ export default function SolutionPanel({ problemData }: SolutionPanelProps) {
 
           <TabsContent value="visualize" className="mt-4">
             <VisualizationDisplay 
-                solutionCode={solutionCodes.python}
+                solutionCodes={solutionCodes}
                 defaultInput={defaultInput}
                 dsaTopic={dsaTopic}
             />

@@ -14,18 +14,19 @@ import { getVisualization } from '@/app/actions';
 import { Loader2, Play } from 'lucide-react';
 import AnimationPlayer from './animation-player';
 import type { VisualizeSolutionOutput } from '@/ai/flows/visualize-solution';
+import type { ProblemData } from '@/lib/types';
 
 const formSchema = z.object({
   userInput: z.string().min(1, 'Please provide an input to visualize.'),
 });
 
 interface VisualizationDisplayProps {
-  solutionCode: string;
+  solutionCodes: ProblemData['solutionCodes'];
   defaultInput: string;
   dsaTopic: string;
 }
 
-export default function VisualizationDisplay({ solutionCode, defaultInput, dsaTopic }: VisualizationDisplayProps) {
+export default function VisualizationDisplay({ solutionCodes, defaultInput, dsaTopic }: VisualizationDisplayProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [visualizationData, setVisualizationData] = useState<VisualizeSolutionOutput | null>(null);
   const [animationKey, setAnimationKey] = useState(0);
@@ -42,12 +43,14 @@ export default function VisualizationDisplay({ solutionCode, defaultInput, dsaTo
     setIsLoading(true);
     setVisualizationData(null);
 
+    const solutionCode = solutionCodes.python || solutionCodes.cpp || solutionCodes.c || solutionCodes.javascript;
+
     if (!solutionCode) {
         setIsLoading(false);
         toast({
             variant: 'destructive',
             title: 'Visualization Error',
-            description: 'Cannot generate visualization because the Python solution code is missing.',
+            description: 'No compatible solution code (Python, C++, C, JS) is available to generate a visualization.',
         });
         return;
     }
@@ -73,7 +76,7 @@ export default function VisualizationDisplay({ solutionCode, defaultInput, dsaTo
         <CardHeader>
           <CardTitle>Interactive Visualization</CardTitle>
           <CardDescription>
-            Enter your own input to see how the algorithm solves the problem step-by-step. The visualization uses the Python solution.
+            Enter your own input to see how the algorithm solves the problem step-by-step. The visualization uses the Python solution primarily, with fallbacks to other languages.
           </CardDescription>
         </CardHeader>
         <CardContent>
