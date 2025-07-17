@@ -13,25 +13,55 @@ import ReactMarkdown from 'react-markdown';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 
-
 interface SolutionPanelProps {
   problemData: ProblemData;
 }
 
-export default function SolutionPanel({ problemData }: SolutionPanelProps) {
-  const { hints, solutionCode, solutionExplanation, dsaTopic, defaultInput } = problemData;
+interface LanguageTabProps {
+  language: string;
+  code: string;
+}
+
+const LanguageTabContent = ({ language, code }: LanguageTabProps) => {
   const [isCopied, setIsCopied] = useState(false);
   const { toast } = useToast();
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(solutionCode).then(() => {
+    if (!code) {
+        toast({ variant: 'destructive', title: 'Error', description: 'No code available to copy for this language.' });
+        return;
+    }
+    navigator.clipboard.writeText(code).then(() => {
         setIsCopied(true);
-        toast({ title: 'Success', description: 'Code copied to clipboard!' });
+        toast({ title: 'Success', description: `${language} code copied to clipboard!` });
         setTimeout(() => setIsCopied(false), 2000);
     }, (err) => {
         toast({ variant: 'destructive', title: 'Error', description: 'Failed to copy code.' });
     });
   };
+
+  return (
+    <div className="relative">
+      <Button
+          size="icon"
+          variant="ghost"
+          className="absolute top-2 right-2 h-7 w-7 z-10"
+          onClick={handleCopy}
+      >
+          {isCopied ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
+          <span className="sr-only">Copy {language} code</span>
+      </Button>
+      <ScrollArea className="h-60 scroll-fade">
+        <div className="bg-muted rounded-md p-4">
+          <pre className="font-code text-sm whitespace-pre-wrap"><code>{code || `// No solution provided for ${language}`}</code></pre>
+        </div>
+      </ScrollArea>
+    </div>
+  );
+};
+
+export default function SolutionPanel({ problemData }: SolutionPanelProps) {
+  const { hints, solutionCodes, solutionExplanation, dsaTopic, defaultInput } = problemData;
 
   return (
     <Card className="shadow-lg w-full">
@@ -61,11 +91,12 @@ export default function SolutionPanel({ problemData }: SolutionPanelProps) {
                   <ReactMarkdown
                     components={{
                       p: (props) => <div {...props} className="mb-4 last:mb-0" />,
+                      pre: ({ node, ...props }) => <pre className="font-code text-sm bg-muted rounded-md p-3 my-3 overflow-x-auto" {...props} />,
                       code({node, inline, className, children, ...props}) {
                         const match = /language-(\w+)/.exec(className || '')
-                        return !inline ? (
+                        return !inline && match ? (
                           <pre className="font-code text-sm bg-muted rounded-md p-3 my-3 overflow-x-auto">
-                            <code {...props}>
+                            <code {...props} className={className}>
                               {children}
                             </code>
                           </pre>
@@ -83,28 +114,36 @@ export default function SolutionPanel({ problemData }: SolutionPanelProps) {
               </div>
               <div>
                 <h3 className="font-headline text-xl font-semibold mb-2">Code</h3>
-                <div className="relative">
-                    <Button
-                        size="icon"
-                        variant="ghost"
-                        className="absolute top-2 right-2 h-7 w-7"
-                        onClick={handleCopy}
-                    >
-                        {isCopied ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
-                        <span className="sr-only">Copy code</span>
-                    </Button>
-                    <ScrollArea className="h-60 scroll-fade">
-                        <div className="bg-muted rounded-md p-4">
-                        <pre className="font-code text-sm"><code>{solutionCode}</code></pre>
-                        </div>
-                    </ScrollArea>
-                </div>
+                 <Tabs defaultValue="python" className="w-full">
+                    <TabsList>
+                        <TabsTrigger value="python">Python</TabsTrigger>
+                        <TabsTrigger value="javascript">JavaScript</TabsTrigger>
+                        <TabsTrigger value="java">Java</TabsTrigger>
+                        <TabsTrigger value="c">C</TabsTrigger>
+                        <TabsTrigger value="cpp">C++</TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="python" className="mt-2">
+                        <LanguageTabContent language="Python" code={solutionCodes.python} />
+                    </TabsContent>
+                    <TabsContent value="javascript" className="mt-2">
+                        <LanguageTabContent language="JavaScript" code={solutionCodes.javascript} />
+                    </TabsContent>
+                    <TabsContent value="java" className="mt-2">
+                        <LanguageTabContent language="Java" code={solutionCodes.java} />
+                    </TabsContent>
+                    <TabsContent value="c" className="mt-2">
+                        <LanguageTabContent language="C" code={solutionCodes.c} />
+                    </TabsContent>
+                    <TabsContent value="cpp" className="mt-2">
+                        <LanguageTabContent language="C++" code={solutionCodes.cpp} />
+                    </TabsContent>
+                 </Tabs>
               </div>
           </TabsContent>
 
           <TabsContent value="visualize" className="mt-4">
             <VisualizationDisplay 
-                solutionCode={solutionCode}
+                solutionCode={solutionCodes.python}
                 defaultInput={defaultInput}
                 dsaTopic={dsaTopic}
             />

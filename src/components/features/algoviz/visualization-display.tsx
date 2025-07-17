@@ -41,6 +41,17 @@ export default function VisualizationDisplay({ solutionCode, defaultInput, dsaTo
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsLoading(true);
     setVisualizationData(null);
+
+    if (!solutionCode) {
+        setIsLoading(false);
+        toast({
+            variant: 'destructive',
+            title: 'Visualization Error',
+            description: 'Cannot generate visualization because the Python solution code is missing.',
+        });
+        return;
+    }
+
     const result = await getVisualization({ solutionCode, userInput: values.userInput });
     setIsLoading(false);
 
@@ -62,7 +73,7 @@ export default function VisualizationDisplay({ solutionCode, defaultInput, dsaTo
         <CardHeader>
           <CardTitle>Interactive Visualization</CardTitle>
           <CardDescription>
-            Enter your own input to see how the algorithm solves the problem step-by-step.
+            Enter your own input to see how the algorithm solves the problem step-by-step. The visualization uses the Python solution.
           </CardDescription>
         </CardHeader>
         <CardContent>

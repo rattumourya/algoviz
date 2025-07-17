@@ -18,9 +18,17 @@ const SimilarProblemSchema = z.object({
   dsaTopic: z.string().describe('The primary DSA topic for the similar problem.'),
 });
 
+const SolutionCodeSchema = z.object({
+    python: z.string().describe('The optimal solution code in Python.'),
+    javascript: z.string().describe('The optimal solution code in JavaScript.'),
+    java: z.string().describe('The optimal solution code in Java.'),
+    c: z.string().describe('The optimal solution code in C.'),
+    cpp: z.string().describe('The optimal solution code in C++.'),
+});
+
 const GenerateSolutionOutputSchema = z.object({
-  solutionCode: z.string().describe('The python solution code for the problem.'),
-  solutionExplanation: z.string().describe('A step-by-step explanation of the solution, formatted as markdown.'),
+  solutionCodes: SolutionCodeSchema,
+  solutionExplanation: z.string().describe('A step-by-step explanation of the solution, formatted as markdown. The explanation should be language-agnostic.'),
   hints: z.array(z.string()).describe('Three concise and helpful hints to guide the user towards the solution.'),
   similarProblems: z.array(SimilarProblemSchema).describe('A list of all relevant similar LeetCode problems with their details.'),
   defaultInput: z.string().describe('A default valid input for the problem, formatted as a string (e.g., "height = [1,8,6,2,5,4,8,3,7]")'),
@@ -47,7 +55,8 @@ const prompt = ai.definePrompt({
     input: { schema: GenerateSolutionInputSchema },
     output: { schema: GenerateSolutionOutputSchema, format: 'json' },
     prompt: `
-      You are a LeetCode expert and a world-class software engineer. Given a LeetCode problem, provide an optimal solution in Python, a detailed explanation for the solution, 3 concise, helpful hints, a list of all similar problems with their full details, and a default input example.
+      You are a LeetCode expert and a world-class software engineer. Given a LeetCode problem, provide an optimal solution in Python, JavaScript, Java, C, and C++.
+      Also provide a single, language-agnostic, detailed explanation for the solution, 3 concise, helpful hints, a list of all similar problems with their full details, and a default input example.
       
       Problem Statement: {{{problemStatement}}}
       Constraints: {{{constraints}}}
