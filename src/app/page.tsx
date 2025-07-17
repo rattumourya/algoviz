@@ -29,7 +29,7 @@ export default function Home() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      problemNumber: undefined,
+      problemNumber: '' as any,
     },
   });
 
