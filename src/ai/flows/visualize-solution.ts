@@ -19,8 +19,8 @@ const VisualizeSolutionInputSchema = z.object({
 export type VisualizeSolutionInput = z.infer<typeof VisualizeSolutionInputSchema>;
 
 const VisualizeSolutionOutputSchema = z.object({
-  visualizationType: z.string().describe('The type of visualization to use (e.g., animation, diagram).'),
-  visualizationData: z.string().describe('The data for the visualization (e.g., animation steps, diagram nodes).'),
+  visualizationType: z.string().describe('The type of visualization to use (e.g., "animation", "diagram").'),
+  visualizationData: z.string().describe('The data for the visualization. For "animation", this should be a JSON string of an array of step objects. For "diagram", it can be a string representation of the diagram data (e.g., DOT format or another JSON structure).'),
 });
 export type VisualizeSolutionOutput = z.infer<typeof VisualizeSolutionOutputSchema>;
 
@@ -38,16 +38,16 @@ LeetCode Problem Number: {{{leetcodeNumber}}}
 Problem Description: {{{problemDescription}}}
 Solution Code: {{{solutionCode}}}
 
-You must respond with JSON that contains the type of visualization to use (visualizationType) and the data for the visualization (visualizationData).
+You must respond with a JSON object that contains the type of visualization to use (visualizationType) and the data for the visualization (visualizationData).
 
 Consider these visualization types:
-- animation: Use this for algorithms with clear steps and state changes over time.
+- animation: Use this for algorithms with clear steps and state changes over time. The visualizationData should be a JSON string representing an array of objects. Each object must have a 'step' (number) and a 'description' (string) key. It can also include other keys to represent the state at that step (e.g., current array, pointers).
 - diagram: Use this for data structures and relationships between data elements.
 
-Example:
+Example for 'animation' type:
 {
   "visualizationType": "animation",
-  "visualizationData": "[{\"step\": 1, \"description\": \"Initialize variables\"}, {\"step\": 2, \"description\": \"Loop through the array\"}]"
+  "visualizationData": "[{\\"step\\": 1, \\"description\\": \\"Initialize variables i=0, j=5\\", \\"i\\": 0, \\"j\\": 5}, {\\"step\\": 2, \\"description\\": \\"Swap elements at i and j\\", \\"i\\": 1, \\"j\\": 4}]"
 }
 `,
 });
