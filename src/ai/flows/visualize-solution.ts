@@ -1,3 +1,4 @@
+
 'use server';
 
 /**
@@ -37,7 +38,7 @@ export async function visualizeSolution(input: VisualizeSolutionInput): Promise<
 const prompt = ai.definePrompt({
   name: 'visualizeSolutionPrompt',
   input: { schema: VisualizeSolutionInputSchema },
-  output: { schema: VisualizeSolutionOutputSchema },
+  output: { schema: VisualizeSolutionOutputSchema, format: 'json' },
   prompt: `
 You are an expert algorithm visualizer. Your task is to trace the execution of the given Python code with the provided input and generate a step-by-step animation of an array-based algorithm.
 
