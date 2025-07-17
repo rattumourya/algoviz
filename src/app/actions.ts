@@ -16,7 +16,7 @@ const SolutionAndHintsSchema = z.object({
   solutionCode: z.string().describe('The python solution code for the problem.'),
   solutionExplanation: z.string().describe('A step-by-step explanation of the solution, formatted as markdown.'),
   hints: z.array(z.string()).describe('Three concise and helpful hints to guide the user towards the solution.'),
-  similarProblems: z.array(SimilarProblemSchema).describe('A list of 3-5 similar LeetCode problems with their details.'),
+  similarProblems: z.array(SimilarProblemSchema).describe('A list of all relevant similar LeetCode problems with their details.'),
 });
 
 export async function getProblemAndSolution(problemNumber: number) {
@@ -28,7 +28,7 @@ export async function getProblemAndSolution(problemNumber: number) {
     }
 
     const solutionAndHintsPrompt = `
-      You are a LeetCode expert and a world-class software engineer. Given a LeetCode problem, provide an optimal solution in Python, a detailed explanation for the solution, 3 concise, helpful hints, and a list of similar problems with their full details.
+      You are a LeetCode expert and a world-class software engineer. Given a LeetCode problem, provide an optimal solution in Python, a detailed explanation for the solution, 3 concise, helpful hints, and a list of all similar problems with their full details.
       
       Problem Statement: ${problemDetails.problemStatement}
       Constraints: ${problemDetails.constraints}
