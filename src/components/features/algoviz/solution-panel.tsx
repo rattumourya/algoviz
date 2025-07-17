@@ -4,18 +4,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Card, CardContent } from '@/components/ui/card';
 import type { ProblemData } from '@/lib/types';
-import { Lightbulb, Code, PlaySquare, ExternalLink } from 'lucide-react';
+import { Lightbulb, Code, PlaySquare } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { getVisualizationUrl } from '@/lib/dsa-visualization-map';
-import { Button } from '@/components/ui/button';
+import VisualizationDisplay from './visualization-display';
+
 
 interface SolutionPanelProps {
   problemData: ProblemData;
 }
 
 export default function SolutionPanel({ problemData }: SolutionPanelProps) {
-  const { hints, solutionCode, solutionExplanation, dsaTopic } = problemData;
-  const visualizationUrl = getVisualizationUrl(dsaTopic);
+  const { hints, solutionCode, solutionExplanation, dsaTopic, defaultInput } = problemData;
 
   return (
     <Card className="shadow-lg w-full">
@@ -56,19 +55,11 @@ export default function SolutionPanel({ problemData }: SolutionPanelProps) {
           </TabsContent>
 
           <TabsContent value="visualize" className="mt-4">
-            <Card className="border-dashed">
-                <CardContent className="pt-6 text-center space-y-4">
-                    <p className="text-muted-foreground">
-                        To better understand the core concepts behind the <span className="font-semibold text-primary">{dsaTopic}</span> topic, we recommend exploring the interactive visualization on USFCA's website.
-                    </p>
-                    <Button asChild size="lg">
-                        <a href={visualizationUrl} target="_blank" rel="noopener noreferrer">
-                            Visualize <span className="font-bold mx-1">{dsaTopic}</span> Concepts
-                            <ExternalLink className="ml-2 h-5 w-5" />
-                        </a>
-                    </Button>
-                </CardContent>
-            </Card>
+            <VisualizationDisplay 
+                solutionCode={solutionCode}
+                defaultInput={defaultInput}
+                dsaTopic={dsaTopic}
+            />
           </TabsContent>
         </Tabs>
       </CardContent>

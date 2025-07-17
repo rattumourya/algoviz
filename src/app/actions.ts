@@ -2,6 +2,7 @@
 
 import { ai } from '@/ai/genkit';
 import { understandLeetCodeProblem } from '@/ai/flows/understand-leetcode-problem';
+import { visualizeSolution, type VisualizeSolutionInput } from '@/ai/flows/visualize-solution';
 import { z } from 'zod';
 
 const SimilarProblemSchema = z.object({
@@ -16,7 +17,7 @@ const SolutionAndHintsSchema = z.object({
   solutionExplanation: z.string().describe('A step-by-step explanation of the solution, formatted as markdown.'),
   hints: z.array(z.string()).describe('Three concise and helpful hints to guide the user towards the solution.'),
   similarProblems: z.array(SimilarProblemSchema).describe('A list of all relevant similar LeetCode problems with their details.'),
-  defaultInput: z.string().describe('A default valid input for the problem, formatted as a string (e.g., "[1,8,6,2,5,4,8,3,7]")'),
+  defaultInput: z.string().describe('A default valid input for the problem, formatted as a string (e.g., "height = [1,8,6,2,5,4,8,3,7]")'),
 });
 
 export async function getProblemAndSolution(problemNumber: number) {
@@ -69,4 +70,18 @@ export async function getProblemAndSolution(problemNumber: number) {
     const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred while fetching problem details.';
     return { success: false, error: errorMessage };
   }
+}
+
+export async function getVisualization(input: VisualizeSolutionInput) {
+    try {
+        const visualizationData = await visualizeSolution(input);
+        if (!visualizationData || !visualizationData.animation) {
+            throw new Error('Could not generate visualization from the AI model.');
+        }
+        return { success: true, data: visualizationData };
+    } catch (error) {
+        console.error("Error getting visualization:", error);
+        const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred while generating the visualization.';
+        return { success: false, error: errorMessage };
+    }
 }
