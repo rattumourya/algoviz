@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -30,7 +31,7 @@ export default function Home() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      problemNumber: '',
+      problemNumber: 11,
     },
   });
 
@@ -78,7 +79,7 @@ export default function Home() {
                     <FormItem className="w-full">
                       <FormLabel className="sr-only">LeetCode Problem Number</FormLabel>
                       <FormControl>
-                        <Input type="number" placeholder="e.g., 1" {...field} className="text-base" />
+                        <Input type="number" placeholder="e.g., 11" {...field} className="text-base" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -103,14 +104,19 @@ export default function Home() {
         </Card>
 
         {isLoading && (
-          <div className="mt-8 grid grid-cols-1 lg:grid-cols-5 gap-8">
-            <div className="lg:col-span-2 flex flex-col gap-6">
-              <Skeleton className="h-64 w-full" />
-              <Skeleton className="h-48 w-full" />
-              <Skeleton className="h-48 w-full" />
+          <div className="mt-8">
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+              <div className="lg:col-span-2 flex flex-col gap-6">
+                <Skeleton className="h-64 w-full" />
+                <Skeleton className="h-48 w-full" />
+                <Skeleton className="h-48 w-full" />
+              </div>
+              <div className="lg:col-span-3">
+                <Skeleton className="h-[40rem] w-full" />
+              </div>
             </div>
-            <div className="lg:col-span-3">
-              <Skeleton className="h-[40rem] w-full" />
+            <div className="mt-8">
+              <Skeleton className="h-96 w-full" />
             </div>
           </div>
         )}

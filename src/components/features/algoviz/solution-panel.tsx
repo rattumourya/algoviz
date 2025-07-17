@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -7,6 +8,7 @@ import type { ProblemData } from '@/lib/types';
 import { Lightbulb, Code, PlaySquare } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import VisualizationDisplay from './visualization-display';
+import ReactMarkdown from 'react-markdown';
 
 
 interface SolutionPanelProps {
@@ -41,7 +43,28 @@ export default function SolutionPanel({ problemData }: SolutionPanelProps) {
               <div>
                 <h3 className="font-headline text-xl font-semibold mb-2">Explanation</h3>
                 <ScrollArea className="h-60">
-                  <div className="prose prose-sm max-w-none text-foreground/90 pr-4" dangerouslySetInnerHTML={{ __html: solutionExplanation.replace(/\\n/g, '<br />') }} />
+                  <div className="prose prose-sm max-w-none text-foreground/90 pr-4">
+                    <ReactMarkdown
+                      components={{
+                        code({node, inline, className, children, ...props}) {
+                          const match = /language-(\w+)/.exec(className || '')
+                          return !inline ? (
+                            <pre className="font-code text-sm bg-muted rounded-md p-3 my-3 overflow-x-auto">
+                              <code {...props}>
+                                {children}
+                              </code>
+                            </pre>
+                          ) : (
+                            <code className="font-code bg-muted px-1 py-0.5 rounded-sm" {...props}>
+                              {children}
+                            </code>
+                          )
+                        }
+                      }}
+                    >
+                      {solutionExplanation}
+                    </ReactMarkdown>
+                  </div>
                 </ScrollArea>
               </div>
               <div>
