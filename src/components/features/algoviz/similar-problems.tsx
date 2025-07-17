@@ -7,6 +7,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import type { SimilarProblem } from '@/lib/types';
 import { Shapes, Link as LinkIcon, ChevronLeft, ChevronRight } from 'lucide-react';
+import { toKebabCase } from '@/lib/utils';
+import Link from 'next/link';
 
 interface SimilarProblemsProps {
   problems: SimilarProblem[];
@@ -45,7 +47,15 @@ export default function SimilarProblems({ problems }: SimilarProblemsProps) {
           {currentProblems.map((problem) => (
             <AccordionItem value={`item-${problem.problemNumber}`} key={problem.problemNumber}>
               <AccordionTrigger className="font-headline text-lg hover:no-underline">
-                {problem.problemNumber}. {problem.problemName}
+                <div className="flex items-center gap-2">
+                    <span>{problem.problemNumber}. {problem.problemName}</span>
+                     <Button variant="ghost" size="icon" className="h-7 w-7" asChild onClick={(e) => e.stopPropagation()}>
+                        <Link href={`https://leetcode.com/problems/${toKebabCase(problem.problemName)}/`} target="_blank" rel="noopener noreferrer">
+                            <LinkIcon className="h-4 w-4 text-primary" />
+                            <span className="sr-only">Solve on LeetCode</span>
+                        </Link>
+                    </Button>
+                </div>
               </AccordionTrigger>
               <AccordionContent className="space-y-4">
                 <p className="whitespace-pre-wrap text-foreground/90">{problem.problemStatement}</p>

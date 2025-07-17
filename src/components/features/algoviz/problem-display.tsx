@@ -1,8 +1,10 @@
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import type { ProblemData } from '@/lib/types';
-import { FileText, GanttChartSquare, ListOrdered, Shapes, Tag, ThumbsUp, Link as LinkIcon } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { FileText, GanttChartSquare, ListOrdered, Shapes, ThumbsUp, Link as LinkIcon } from 'lucide-react';
+import { cn, toKebabCase } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 export default function ProblemDisplay(props: Omit<ProblemData, 'similarProblems'>) {
   const { problemNumber, problemName, dsaTopic, difficultyLevel, problemStatement, constraints, examples } = props;
@@ -13,12 +15,14 @@ export default function ProblemDisplay(props: Omit<ProblemData, 'similarProblems
     "Hard": "bg-red-500 hover:bg-red-500/90",
   }
 
+  const leetcodeUrl = `https://leetcode.com/problems/${toKebabCase(problemName)}/`;
+
   return (
     <>
       <Card className="shadow-md">
         <CardHeader>
           <CardTitle className="font-headline text-2xl">{problemNumber}. {problemName}</CardTitle>
-          <div className="flex flex-wrap gap-2 pt-2">
+          <div className="flex flex-wrap items-center gap-2 pt-2">
             <Badge className={cn("text-primary-foreground", difficultyColors[difficultyLevel])}>
               <ThumbsUp className="h-3 w-3 mr-1.5" />
               {difficultyLevel}
@@ -27,6 +31,12 @@ export default function ProblemDisplay(props: Omit<ProblemData, 'similarProblems
               <Shapes className="h-3 w-3 mr-1.5" />
               {dsaTopic}
             </Badge>
+            <Button variant="ghost" size="icon" className="h-7 w-7" asChild>
+                <Link href={leetcodeUrl} target="_blank" rel="noopener noreferrer">
+                    <LinkIcon className="h-4 w-4 text-primary" />
+                    <span className="sr-only">Solve on LeetCode</span>
+                </Link>
+            </Button>
           </div>
         </CardHeader>
         <CardContent>
