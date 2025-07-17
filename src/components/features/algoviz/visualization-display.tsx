@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -27,6 +28,7 @@ interface VisualizationDisplayProps {
 export default function VisualizationDisplay({ solutionCode, defaultInput, dsaTopic }: VisualizationDisplayProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [visualizationData, setVisualizationData] = useState<VisualizeSolutionOutput | null>(null);
+  const [animationKey, setAnimationKey] = useState(0);
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -44,6 +46,7 @@ export default function VisualizationDisplay({ solutionCode, defaultInput, dsaTo
 
     if (result.success) {
       setVisualizationData(result.data);
+      setAnimationKey(prevKey => prevKey + 1); // Force re-mount of AnimationPlayer
     } else {
       toast({
         variant: 'destructive',
@@ -104,7 +107,7 @@ export default function VisualizationDisplay({ solutionCode, defaultInput, dsaTo
         </div>
       )}
 
-      {visualizationData && <AnimationPlayer data={visualizationData} dsaTopic={dsaTopic} />}
+      {visualizationData && <AnimationPlayer key={animationKey} data={visualizationData} dsaTopic={dsaTopic} />}
     </div>
   );
 }
