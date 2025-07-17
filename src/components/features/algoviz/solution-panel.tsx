@@ -6,6 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import type { ProblemData } from '@/lib/types';
 import { Lightbulb, Code, PlaySquare } from 'lucide-react';
 import VisualizationDisplay from './visualization-display';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface SolutionPanelProps {
   problemData: ProblemData;
@@ -38,13 +39,17 @@ export default function SolutionPanel({ problemData }: SolutionPanelProps) {
           <TabsContent value="solution" className="mt-4 space-y-4">
               <div>
                 <h3 className="font-headline text-xl font-semibold mb-2">Explanation</h3>
-                <div className="prose prose-sm max-w-none text-foreground/90" dangerouslySetInnerHTML={{ __html: solutionExplanation.replace(/\n/g, '<br />') }} />
+                <ScrollArea className="h-60">
+                  <div className="prose prose-sm max-w-none text-foreground/90 pr-4" dangerouslySetInnerHTML={{ __html: solutionExplanation.replace(/\\n/g, '<br />') }} />
+                </ScrollArea>
               </div>
               <div>
                 <h3 className="font-headline text-xl font-semibold mb-2">Code</h3>
-                <div className="bg-muted rounded-md p-4">
-                  <pre className="font-code text-sm overflow-x-auto"><code>{solutionCode}</code></pre>
-                </div>
+                <ScrollArea className="h-60">
+                  <div className="bg-muted rounded-md p-4">
+                    <pre className="font-code text-sm"><code>{solutionCode}</code></pre>
+                  </div>
+                </ScrollArea>
               </div>
           </TabsContent>
 
