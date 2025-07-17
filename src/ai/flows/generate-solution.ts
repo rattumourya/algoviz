@@ -45,7 +45,7 @@ export async function generateSolution(input: GenerateSolutionInput): Promise<Ge
 const prompt = ai.definePrompt({
     name: 'generateSolutionPrompt',
     input: { schema: GenerateSolutionInputSchema },
-    output: { schema: GenerateSolutionOutputSchema },
+    output: { schema: GenerateSolutionOutputSchema, format: 'json' },
     prompt: `
       You are a LeetCode expert and a world-class software engineer. Given a LeetCode problem, provide an optimal solution in Python, a detailed explanation for the solution, 3 concise, helpful hints, a list of all similar problems with their full details, and a default input example.
       
@@ -66,10 +66,15 @@ const generateSolutionFlow = ai.defineFlow(
     outputSchema: GenerateSolutionOutputSchema,
   },
   async input => {
-    const { output } = await prompt(input);
-    if (!output) {
-        throw new Error('Could not generate a solution for the problem.');
+    try {
+        const { output } = await prompt(input);
+        if (!output) {
+            throw new Error('The AI model did not return a valid solution structure.');
+        }
+        return output;
+    } catch (error) {
+        console.error('Error generating solution:', error);
+        throw new Error('Failed to generate a complete solution from the AI. The model may have returned an invalid format.');
     }
-    return output;
   }
 );
