@@ -69,7 +69,7 @@ Example Input:
 nums = [2, 7, 11, 15], target = 9
 \`\`\`
 
-Example Output JSON Structure (You must follow this structure exactly):
+Your response must be the JSON object only. Example Output JSON Structure:
 \`\`\`json
 {
   "animation": [
