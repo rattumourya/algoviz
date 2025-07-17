@@ -5,4 +5,11 @@ type ActionResponse<T extends (...args: any) => any> = PromiseReturnType<T>
 
 type ProblemActionResponse = ActionResponse<typeof getProblemAndSolution>;
 export type ProblemData = ProblemActionResponse extends { success: true; data: infer D } ? D : never;
-export type SimilarProblem = ProblemData['similarProblems'][number];
+
+// This needs to be defined explicitly as the schema is now in a separate file.
+export type SimilarProblem = {
+    problemNumber: number;
+    problemName: string;
+    problemStatement: string;
+    dsaTopic: string;
+};
