@@ -17,6 +17,7 @@ const SolutionAndHintsSchema = z.object({
   solutionExplanation: z.string().describe('A step-by-step explanation of the solution, formatted as markdown.'),
   hints: z.array(z.string()).describe('Three concise and helpful hints to guide the user towards the solution.'),
   similarProblems: z.array(SimilarProblemSchema).describe('A list of all relevant similar LeetCode problems with their details.'),
+  defaultInput: z.string().describe('A default valid input for the problem, formatted as a string (e.g., "[1,8,6,2,5,4,8,3,7]")'),
 });
 
 export async function getProblemAndSolution(problemNumber: number) {
@@ -28,7 +29,7 @@ export async function getProblemAndSolution(problemNumber: number) {
     }
 
     const solutionAndHintsPrompt = `
-      You are a LeetCode expert and a world-class software engineer. Given a LeetCode problem, provide an optimal solution in Python, a detailed explanation for the solution, 3 concise, helpful hints, and a list of all similar problems with their full details.
+      You are a LeetCode expert and a world-class software engineer. Given a LeetCode problem, provide an optimal solution in Python, a detailed explanation for the solution, 3 concise, helpful hints, a list of all similar problems with their full details, and a default input example.
       
       Problem Statement: ${problemDetails.problemStatement}
       Constraints: ${problemDetails.constraints}
@@ -74,10 +75,11 @@ export async function getProblemAndSolution(problemNumber: number) {
 export async function getVisualization(
   leetcodeNumber: number,
   solutionCode: string,
-  problemDescription: string
+  problemDescription: string,
+  userInput: string
 ) {
   try {
-    const result = await visualizeSolution({ leetcodeNumber, solutionCode, problemDescription });
+    const result = await visualizeSolution({ leetcodeNumber, solutionCode, problemDescription, userInput });
     if (!result) {
       throw new Error('Could not generate visualization data.');
     }

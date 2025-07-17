@@ -4,8 +4,9 @@ import { useState, useMemo, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { ChevronLeft, ChevronRight, Pointer } from 'lucide-react';
+import { CheckCircle2, ChevronLeft, ChevronRight, Pointer, Trophy } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Badge } from '@/components/ui/badge';
 
 interface AnimationStep {
   step: number;
@@ -17,6 +18,7 @@ interface AnimationStep {
 
 interface AnimationPlayerProps {
   data: string;
+  finalOutput: any;
 }
 
 const POINTER_COLORS = [
@@ -28,7 +30,7 @@ const POINTER_COLORS = [
   '#fb923c', // orange-400
 ];
 
-export default function AnimationPlayer({ data }: AnimationPlayerProps) {
+export default function AnimationPlayer({ data, finalOutput }: AnimationPlayerProps) {
   const [currentStep, setCurrentStep] = useState(0);
 
   const steps: AnimationStep[] = useMemo(() => {
@@ -43,6 +45,10 @@ export default function AnimationPlayer({ data }: AnimationPlayerProps) {
       console.error('Failed to parse animation data:', e);
       return [];
     }
+  }, [data]);
+
+  useEffect(() => {
+    setCurrentStep(0);
   }, [data]);
 
   const pointerColors = useMemo(() => {
@@ -80,6 +86,7 @@ export default function AnimationPlayer({ data }: AnimationPlayerProps) {
 
   const progress = ((currentStep + 1) / steps.length) * 100;
   const activeStepData = steps[currentStep];
+  const isFinished = currentStep === steps.length - 1;
 
   return (
     <Card className="w-full shadow-md overflow-hidden">
@@ -89,7 +96,7 @@ export default function AnimationPlayer({ data }: AnimationPlayerProps) {
           {activeStepData.description}
         </CardDescription>
       </CardHeader>
-      <CardContent className="flex flex-col gap-4 items-center">
+      <CardContent className="flex flex-col gap-6 items-center">
         <div className="w-full p-4 bg-muted rounded-lg min-h-[120px] flex items-center justify-center">
           <div className="relative flex flex-wrap gap-1 justify-center">
             {activeStepData.data && activeStepData.data.map((value, index) => (
@@ -121,15 +128,29 @@ export default function AnimationPlayer({ data }: AnimationPlayerProps) {
           </div>
         </div>
 
+        {isFinished && (
+          <div className="w-full p-4 rounded-lg bg-green-50 border border-green-200 text-green-800 flex items-center gap-4">
+              <Trophy className="h-8 w-8 text-green-500" />
+              <div>
+                <h4 className="font-bold">Algorithm Finished!</h4>
+                <p className="text-sm">Final Output: <span className="font-mono bg-green-100 p-1 rounded-md">{JSON.stringify(finalOutput)}</span></p>
+              </div>
+          </div>
+        )}
+
         <div className="w-full">
             <h4 className="font-semibold mb-2 text-sm text-left">Pointers State:</h4>
             <div className="flex flex-wrap gap-x-4 gap-y-2">
-                {activeStepData.pointers && Object.entries(activeStepData.pointers).map(([name, pos]) => (
-                    <div key={name} className="flex items-center gap-2">
-                        <div className="w-3 h-3 rounded-full" style={{ backgroundColor: pointerColors[name] }} />
-                        <span className="font-mono text-sm">{name}: <span className="font-bold">{pos}</span></span>
-                    </div>
-                ))}
+                {activeStepData.pointers && Object.keys(activeStepData.pointers).length > 0 ? (
+                  Object.entries(activeStepData.pointers).map(([name, pos]) => (
+                      <div key={name} className="flex items-center gap-2">
+                          <div className="w-3 h-3 rounded-full" style={{ backgroundColor: pointerColors[name] }} />
+                          <span className="font-mono text-sm">{name}: <span className="font-bold">{pos}</span></span>
+                      </div>
+                  ))
+                ) : (
+                  <span className="text-sm text-muted-foreground">No pointers in this step.</span>
+                )}
             </div>
         </div>
       </CardContent>
@@ -140,7 +161,7 @@ export default function AnimationPlayer({ data }: AnimationPlayerProps) {
             <ChevronLeft className="h-4 w-4 mr-2" />
             Previous
           </Button>
-          <Button onClick={handleNext} disabled={currentStep === steps.length - 1}>
+          <Button onClick={handleNext} disabled={isFinished}>
             Next
             <ChevronRight className="h-4 w-4 ml-2" />
           </Button>
