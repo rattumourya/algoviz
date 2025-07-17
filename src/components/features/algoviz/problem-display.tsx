@@ -4,8 +4,8 @@ import type { ProblemData } from '@/lib/types';
 import { FileText, GanttChartSquare, ListOrdered, Shapes, Tag, ThumbsUp, Link as LinkIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-export default function ProblemDisplay(props: ProblemData) {
-  const { problemNumber, problemName, dsaTopic, difficultyLevel, problemStatement, constraints, examples, similarProblems } = props;
+export default function ProblemDisplay(props: Omit<ProblemData, 'similarProblems'>) {
+  const { problemNumber, problemName, dsaTopic, difficultyLevel, problemStatement, constraints, examples } = props;
 
   const difficultyColors: {[key: string]: string} = {
     "Easy": "bg-green-500 hover:bg-green-500/90",
@@ -49,19 +49,6 @@ export default function ProblemDisplay(props: ProblemData) {
         </CardHeader>
         <CardContent>
           <p className="whitespace-pre-wrap font-code text-foreground/90">{examples}</p>
-        </CardContent>
-      </Card>
-      <Card className="shadow-md">
-        <CardHeader className="flex flex-row items-center gap-4 space-y-0">
-          <LinkIcon className="h-6 w-6 text-primary" />
-          <CardTitle className="font-headline text-2xl">Similar Problems</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ul className="list-disc pl-5 space-y-1 text-foreground/90">
-            {similarProblems.map((problem, index) => (
-              <li key={index}>{problem}</li>
-            ))}
-          </ul>
         </CardContent>
       </Card>
     </>

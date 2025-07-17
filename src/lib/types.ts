@@ -5,6 +5,8 @@ type ActionResponse<T extends (...args: any) => any> = PromiseReturnType<T>
 
 type ProblemActionResponse = ActionResponse<typeof getProblemAndSolution>;
 export type ProblemData = ProblemActionResponse extends { success: true; data: infer D } ? D : never;
+export type SimilarProblem = ProblemData['similarProblems'][number];
+
 
 type VisActionResponse = ActionResponse<typeof getVisualization>;
 export type VisualizationData = VisActionResponse extends { success: true; data: infer D } ? D : never;

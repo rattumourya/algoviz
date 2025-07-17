@@ -16,6 +16,7 @@ import type { ProblemData } from '@/lib/types';
 import ProblemDisplay from '@/components/features/algoviz/problem-display';
 import SolutionPanel from '@/components/features/algoviz/solution-panel';
 import { Skeleton } from '@/components/ui/skeleton';
+import SimilarProblems from '@/components/features/algoviz/similar-problems';
 
 const formSchema = z.object({
   problemNumber: z.coerce.number().min(1, 'Please enter a valid LeetCode problem number.'),
@@ -29,7 +30,7 @@ export default function Home() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      problemNumber: '' as any,
+      problemNumber: '',
     },
   });
 
@@ -115,14 +116,19 @@ export default function Home() {
         )}
 
         {problemData && (
-          <div className="mt-8 grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
-            <div className="lg:col-span-2 flex flex-col gap-6">
-              <ProblemDisplay {...problemData} />
+          <>
+            <div className="mt-8 grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
+              <div className="lg:col-span-2 flex flex-col gap-6">
+                <ProblemDisplay {...problemData} />
+              </div>
+              <div className="lg:col-span-3">
+                <SolutionPanel problemData={problemData} />
+              </div>
             </div>
-            <div className="lg:col-span-3">
-              <SolutionPanel problemData={problemData} />
+            <div className="mt-8">
+              <SimilarProblems problems={problemData.similarProblems} />
             </div>
-          </div>
+          </>
         )}
       </div>
     </div>
