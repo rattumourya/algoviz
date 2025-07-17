@@ -15,6 +15,7 @@ import { Loader2, Play } from 'lucide-react';
 import AnimationPlayer from './animation-player';
 import type { VisualizeSolutionOutput } from '@/ai/flows/visualize-solution';
 import type { ProblemData } from '@/lib/types';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 const formSchema = z.object({
   userInput: z.string().min(1, 'Please provide an input to visualize.'),
@@ -100,14 +101,21 @@ export default function VisualizationDisplay({ solutionCodes, defaultInput, dsaT
                   </FormItem>
                 )}
               />
-              <Button type="submit" disabled={isLoading}>
-                {isLoading ? (
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                ) : (
-                  <Play className="mr-2 h-4 w-4" />
-                )}
-                Generate Visualization
-              </Button>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span tabIndex={0}>
+                      <Button type="submit" disabled={true}>
+                        <Play className="mr-2 h-4 w-4" />
+                        Generate Visualization
+                      </Button>
+                    </span>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Visualization for this problem is still in development.</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </form>
           </Form>
         </CardContent>
