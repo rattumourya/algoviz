@@ -101,21 +101,23 @@ export default function VisualizationDisplay({ solutionCodes, defaultInput, dsaT
                   </FormItem>
                 )}
               />
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <span tabIndex={0}>
-                      <Button type="submit" disabled={true}>
-                        <Play className="mr-2 h-4 w-4" />
-                        Generate Visualization
-                      </Button>
-                    </span>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Visualization for this problem is still in development.</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+              <div className="pt-2">
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <span tabIndex={0}>
+                        <Button type="submit" disabled={true}>
+                          <Play className="mr-2 h-4 w-4" />
+                          Generate Visualization
+                        </Button>
+                      </span>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Visualization for this problem is still in development.</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
             </form>
           </Form>
         </CardContent>
