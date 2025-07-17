@@ -46,6 +46,7 @@ export default function SolutionPanel({ problemData }: SolutionPanelProps) {
                   <div className="prose prose-sm max-w-none text-foreground/90 pr-4">
                     <ReactMarkdown
                       components={{
+                        p: (props) => <div {...props} className="mb-4 last:mb-0" />,
                         code({node, inline, className, children, ...props}) {
                           const match = /language-(\w+)/.exec(className || '')
                           return !inline ? (
