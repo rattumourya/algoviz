@@ -9,6 +9,7 @@ const SolutionAndHintsSchema = z.object({
   solutionCode: z.string().describe('The python solution code for the problem.'),
   solutionExplanation: z.string().describe('A step-by-step explanation of the solution, formatted as markdown.'),
   hints: z.array(z.string()).describe('Three concise and helpful hints to guide the user towards the solution.'),
+  similarProblems: z.array(z.string()).describe('A list of 3-5 similar LeetCode problems, formatted as "Problem Number. Problem Name".'),
 });
 
 export async function getProblemAndSolution(problemNumber: number) {
@@ -20,7 +21,7 @@ export async function getProblemAndSolution(problemNumber: number) {
     }
 
     const solutionAndHintsPrompt = `
-      You are a LeetCode expert and a world-class software engineer. Given a LeetCode problem, provide an optimal solution in Python, a detailed explanation for the solution, and 3 concise, helpful hints.
+      You are a LeetCode expert and a world-class software engineer. Given a LeetCode problem, provide an optimal solution in Python, a detailed explanation for the solution, 3 concise, helpful hints, and a list of similar problems.
       
       Problem Statement: ${problemDetails.problemStatement}
       Constraints: ${problemDetails.constraints}
@@ -74,7 +75,8 @@ export async function getVisualization(
       throw new Error('Could not generate visualization data.');
     }
     return { success: true, data: result };
-  } catch (error) {
+  } catch (error)
+    {
     console.error(error);
     const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred during visualization.';
     return { success: false, error: errorMessage };

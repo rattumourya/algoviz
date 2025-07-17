@@ -21,6 +21,15 @@ export type UnderstandLeetCodeProblemInput = z.infer<
 >;
 
 const UnderstandLeetCodeProblemOutputSchema = z.object({
+  problemName: z.string().describe('The name of the LeetCode problem.'),
+  dsaTopic: z
+    .string()
+    .describe(
+      'The primary Data Structures and Algorithms (DSA) topic for the problem (e.g., "Arrays", "Dynamic Programming", "Graphs").'
+    ),
+  difficultyLevel: z
+    .enum(['Easy', 'Medium', 'Hard'])
+    .describe('The difficulty level of the problem.'),
   problemStatement: z.string().describe('The problem statement.'),
   constraints: z.string().describe('The constraints of the problem.'),
   examples: z.string().describe('Examples for the problem.'),
@@ -39,7 +48,7 @@ const prompt = ai.definePrompt({
   name: 'understandLeetCodeProblemPrompt',
   input: {schema: UnderstandLeetCodeProblemInputSchema},
   output: {schema: UnderstandLeetCodeProblemOutputSchema},
-  prompt: `You are a LeetCode problem expert. Given a LeetCode problem number, you will return the problem statement, constraints, and examples.
+  prompt: `You are a LeetCode problem expert. Given a LeetCode problem number, you will return the problem name, its primary DSA topic, difficulty level, the problem statement, constraints, and examples.
 
   Problem Number: {{{problemNumber}}}
   `,
