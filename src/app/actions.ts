@@ -2,7 +2,6 @@
 
 import { ai } from '@/ai/genkit';
 import { understandLeetCodeProblem } from '@/ai/flows/understand-leetcode-problem';
-import { visualizeSolution } from '@/ai/flows/visualize-solution';
 import { z } from 'zod';
 
 const SimilarProblemSchema = z.object({
@@ -68,26 +67,6 @@ export async function getProblemAndSolution(problemNumber: number) {
   } catch (error) {
     console.error(error);
     const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred while fetching problem details.';
-    return { success: false, error: errorMessage };
-  }
-}
-
-export async function getVisualization(
-  leetcodeNumber: number,
-  solutionCode: string,
-  problemDescription: string,
-  userInput: string
-) {
-  try {
-    const result = await visualizeSolution({ leetcodeNumber, solutionCode, problemDescription, userInput });
-    if (!result) {
-      throw new Error('Could not generate visualization data.');
-    }
-    return { success: true, data: result };
-  } catch (error)
-    {
-    console.error(error);
-    const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred during visualization.';
     return { success: false, error: errorMessage };
   }
 }
