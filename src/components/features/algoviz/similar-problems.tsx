@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import type { SimilarProblem } from '@/lib/types';
-import { Shapes, Link as LinkIcon, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Shapes, Link as LinkIcon, ChevronLeft, ChevronRight, Info } from 'lucide-react';
 import { toKebabCase } from '@/lib/utils';
 import Link from 'next/link';
 
@@ -59,6 +59,13 @@ export default function SimilarProblems({ problems }: SimilarProblemsProps) {
               </AccordionTrigger>
               <AccordionContent className="space-y-4">
                 <p className="whitespace-pre-wrap text-foreground/90">{problem.problemStatement}</p>
+                <div className="bg-primary/5 border-l-4 border-primary/50 p-3 rounded-r-md">
+                    <div className="flex items-center gap-2 mb-2">
+                        <Info className="h-4 w-4 text-primary" />
+                        <h4 className="font-semibold text-sm">How it's related:</h4>
+                    </div>
+                    <p className="text-sm text-foreground/80 italic">{problem.relationship}</p>
+                </div>
                 <div>
                   <Badge variant="secondary">
                     <Shapes className="h-3 w-3 mr-1.5" />

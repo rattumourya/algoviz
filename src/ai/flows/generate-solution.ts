@@ -16,6 +16,7 @@ const SimilarProblemSchema = z.object({
   problemName: z.string().describe('The name of the LeetCode problem.'),
   problemStatement: z.string().describe('The problem statement for the similar problem.'),
   dsaTopic: z.string().describe('The primary DSA topic for the similar problem.'),
+  relationship: z.string().describe('A brief explanation of how this problem is related to the original one.'),
 });
 
 const SolutionCodeSchema = z.object({
@@ -57,6 +58,7 @@ const prompt = ai.definePrompt({
     prompt: `
       You are a LeetCode expert and a world-class software engineer. Given a LeetCode problem, provide an optimal solution in Python, JavaScript, Java, C, and C++.
       Also provide a single, language-agnostic, detailed explanation for the solution, 3 concise, helpful hints, a list of all similar problems with their full details, and a default input example.
+      For each similar problem, include a brief explanation describing how it relates to the main problem.
       
       Problem Statement: {{{problemStatement}}}
       Constraints: {{{constraints}}}

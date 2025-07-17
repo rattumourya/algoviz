@@ -12,4 +12,5 @@ export type SimilarProblem = {
     problemName: string;
     problemStatement: string;
     dsaTopic: string;
+    relationship: string;
 };
