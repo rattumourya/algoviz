@@ -57,7 +57,8 @@ const prompt = ai.definePrompt({
     output: { schema: GenerateSolutionOutputSchema, format: 'json' },
     prompt: `
       You are a LeetCode expert and a world-class software engineer. Given a LeetCode problem, provide an optimal solution in Python, JavaScript, Java, C, and C++.
-      Also provide a single, language-agnostic, detailed explanation for the solution, 3 concise, helpful hints, a list of all similar problems with their full details, and a default input example.
+      Also provide a single, language-agnostic, detailed explanation for the solution formatted as markdown, 3 concise, helpful hints, a list of all similar problems with their full details, and a default input example.
+      The explanation should be intuitive and broken down into step-by-step instructions.
       For each similar problem, include a brief explanation describing how it relates to the main problem.
       
       Problem Statement: {{{problemStatement}}}
